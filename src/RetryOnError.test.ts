@@ -134,4 +134,19 @@ describe(RetryOnError.name, () => {
     // Verify that the onRetry function was called with the expected arguments
     expect(message).toBe('Retrying (1) due to error: Test error');
   });
+
+  it('should preserve this pointer', async () => {
+    class TestClass {
+      readonly x = 1;
+
+      @RetryOnError()
+      testMethod(): Observable<number> {
+        return of(this.x);
+      }
+    }
+
+    const instance = new TestClass();
+    const result = await instance.testMethod().toPromise();
+    expect(result).toBe(1);
+  });
 });

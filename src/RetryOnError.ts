@@ -20,20 +20,18 @@ export function RetryOnError<
     maxRetries: 3,
     retryDelay: 1000,
     errorFilter: () => true,
-    onRetry: () => {
-    },
+    onRetry: () => {    },
     ...(options || {}),
   };
 
   return createMethodDecoratorFromHighOrderFn((childFunction) => {
-    return function(...args: Parameters<Fn>): ReturnType<Fn> {
-      function getObservable(retryCount: number = 0): ReturnType<Fn> {
-        return childFunction(...args).pipe(
+    return function(this: any, ...args: Parameters<Fn>): ReturnType<Fn> {
+      const getObservable = (retryCount: number = 0): ReturnType<Fn> => {
+        return childFunction.apply(this, args).pipe(
           catchError((error: any) => {
             if (!_options.errorFilter(error) || retryCount >= _options.maxRetries) {
               return throwError(error);
             }
-
             _options.onRetry(error, retryCount + 1);
 
             return getObservable(retryCount + 1).pipe(delay(_options.retryDelay));
