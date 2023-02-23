@@ -1,6 +1,6 @@
 {
-  "name": "<name-of-project>",
-  "version": "0.0.0",
+  "name": "retry-on-error",
+  "version": "1.0.0",
   "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -27,5 +27,9 @@
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
+  },
+  "dependencies": {
+    "method-decorators-utils": "^1.1.3",
+    "rxjs": "^7.8.0"
   }
 }
